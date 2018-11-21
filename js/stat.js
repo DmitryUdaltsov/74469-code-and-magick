@@ -26,7 +26,7 @@ window.renderStatistics = function (ctx, names, times) {
 
   // Настройки для гистограммы
   var histStyle = {
-    maxHeight: 110,
+    maxHeight: 140,
     columnWidth: 40,
     columnGap: 50,
     myColor: 'rgba(255, 0, 0, 1)',
@@ -38,8 +38,19 @@ window.renderStatistics = function (ctx, names, times) {
       return cloudStyle.startX + (cloudStyle.width - (this.columnWidth * times.length + this.columnGap * (times.length - 1))) / 2;
     },
     getGistStartY: function () {
-      return cloudStyle.startY + (cloudStyle.height - this.maxHeight - 50); // 50 - это отступ снизу
+      return cloudStyle.startY + (cloudStyle.height - this.maxHeight - 50); // 50 - это отступ снизу от облака
     }
+  };
+
+  // Объект игрока
+  var Player = function (name, time) {
+    this.name = name;
+    this.time = Math.round(time);
+    this.histColumnHeight = 0;
+    // Вычисляет начальную точку Y колонки гистограммы в пикселях
+    this.getColumnY = function () {
+      return histStyle.getGistStartY() + (histStyle.maxHeight - this.histColumnHeight);
+    };
   };
 
   // Рисует квадрат заданного цвета по координатам.
@@ -61,26 +72,27 @@ window.renderStatistics = function (ctx, names, times) {
     }
   };
 
-  // Получает максимальное время игры
-  var getMaxTime = function (timesArray) {
-    var max = 0;
-    for (var i = 0; i < timesArray.length; i++) {
-      if (timesArray[i] > max) {
-        max = timesArray[i];
+  // Заполняет объекты игроков
+  var createPlayers = function (timesArray, namesArray) {
+    var maxTime = 0;
+    var playersArray = [];
+    if (timesArray.length !== namesArray.length) {
+      console.log('Размеры массивов не совпадают!');
+    } else {
+      // Находит максимальное время прохождения игры
+      for (var i = 0; i < timesArray.length; i++) {
+        if (timesArray[i] > maxTime) {
+          maxTime = timesArray[i];
+        }
+      }
+      for (i = 0; i < timesArray.length; i++) {
+        var nextPlayer = new Player(namesArray[i], timesArray[i]);
+        // Вычисляем высоту колонки гистограммы
+        nextPlayer.histColumnHeight = Math.round(timesArray[i] / maxTime * histStyle.maxHeight);
+        playersArray.push(nextPlayer);
       }
     }
-    return max;
-  };
-
-  // Вычисляет высоту колонки гистограммы
-  var getColumnHeight = function (time) {
-    var max = getMaxTime(times);
-    return time / max * histStyle.maxHeight;
-  };
-
-  // Вычисляет начальную точку Y колонки гистограммы в пикселях
-  var getColumnY = function (time) {
-    return histStyle.getGistStartY() + (histStyle.maxHeight - getColumnHeight(time));
+    return playersArray;
   };
 
   // Рисуем тень
@@ -104,17 +116,24 @@ window.renderStatistics = function (ctx, names, times) {
 
   // Рисуем колонки c именами и временем
   var currentX = histStyle.getGistStartX();
+  var currentY = 0;
+  var nameY = histStyle.getGistStartY()
+      + histStyle.maxHeight
+      + 20; // отступ снизу до имени игрока
+  var playersArray = createPlayers(times, names);
   for (var i = 0; i < times.length; i++) {
     if (names[i] === 'Вы') {
       ctx.fillStyle = histStyle.myColor;
     } else {
       ctx.fillStyle = histStyle.otherColor();
     }
-    ctx.fillRect(currentX, getColumnY(times[i]), histStyle.columnWidth, getColumnHeight(times[i]));
+    currentY = playersArray[i].getColumnY();
+    // Рисуем колонку гистограммы для игрока
+    ctx.fillRect(currentX, currentY, histStyle.columnWidth, playersArray[i].histColumnHeight);
     // Рисуем время прохождения игры
-    drawCloudText(Math.round(times[i]), currentX, getColumnY(times[i]) - 10); // отступ сверху до результата
-    // Рисуем имена игроков
-    drawCloudText(names[i], currentX, histStyle.getGistStartY() + histStyle.maxHeight + 20); // отступ снизу до имени игрока
+    drawCloudText(playersArray[i].time, currentX, currentY - 10); // отступ сверху до результата
+    // Рисуем имя игрока
+    drawCloudText(playersArray[i].name, currentX, nameY);
     currentX += histStyle.columnWidth + histStyle.columnGap;
   }
 };
