@@ -83,11 +83,13 @@ var createDomElement = function (template, objectData) {
 
 // Создает блок разметки из персонажей
 var createBlock = function (parentNode, template, arrayData) {
+  var fragment = document.createDocumentFragment();
   for (var i = 0; i < arrayData.length; i++) {
     var charList = document.querySelector(parentNode);
     var charMarkup = createDomElement(template, arrayData[i]);
-    charList.appendChild(charMarkup);
+    fragment.appendChild(charMarkup);
   }
+  charList.appendChild(fragment);
 };
 
 // Убираем класс .hidden
