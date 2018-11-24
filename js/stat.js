@@ -77,7 +77,7 @@ window.renderStatistics = function (ctx, names, times) {
     var maxTime = 0;
     var playersArray = [];
     if (timesArray.length !== namesArray.length) {
-      console.log('Размеры массивов не совпадают!');
+      console.log('Размеры массивов (времени прохождения и массив имён) не совпадают!');
     } else {
       // Находит максимальное время прохождения игры
       for (var i = 0; i < timesArray.length; i++) {
