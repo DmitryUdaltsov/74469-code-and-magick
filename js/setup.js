@@ -2,7 +2,7 @@
 
 var CHARACTER_COUNT = 4;
 
-var namesArray = [
+var names = [
   'Иван',
   'Хуан Себастьян',
   'Мария',
@@ -13,7 +13,7 @@ var namesArray = [
   'Вашингтон'
 ];
 
-var surnamesArray = [
+var surnames = [
   'да Марья',
   'Верон',
   'Мирабелла',
@@ -24,7 +24,7 @@ var surnamesArray = [
   'Ирвинг'
 ];
 
-var coatColor = [
+var coatColors = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -33,7 +33,7 @@ var coatColor = [
   'rgb(0, 0, 0)'
 ];
 
-var eyesColor = [
+var eyesColors = [
   'black',
   'red',
   'blue',
@@ -55,39 +55,38 @@ var getRandomElement = function (array, optionalArray) {
   return randomElement;
 };
 
-// Объект Похожего персонажа
-var Similar = function () {
-  this.name = getRandomElement(namesArray, surnamesArray);
-  this.coatColor = getRandomElement(coatColor);
-  this.eyesColor = getRandomElement(eyesColor);
-};
-
 // Создает массив из похожих персонажей
-var generateArrayOfSimilars = function (similarsNumber) {
-  var similarsList = [];
-  for (var i = 0; i < similarsNumber; i++) {
-    similarsList.push(new Similar());
+var generateArrayOfSimilarWizards = function (numberOfSimilarWizards) {
+  var similarWizards = [];
+  for (var i = 0; i < numberOfSimilarWizards; i++) {
+    similarWizards.push(
+        { // Объект похожего волшебника
+          name: getRandomElement(names, surnames),
+          coatColor: getRandomElement(coatColors),
+          eyesColor: getRandomElement(eyesColors)
+        }
+    );
   }
-  return similarsList;
+  return similarWizards;
 };
 
 // Создает разметку по шаблону с данными для одного похожего персонажа
-var createDomElement = function (template, objectData) {
-  var fragment = document.querySelector(template).content.querySelector('div');
-  var nextChar = fragment.cloneNode(true);
-  nextChar.querySelector('.setup-similar-label').textContent = objectData.name;
-  nextChar.querySelector('.wizard-coat').setAttribute('fill', objectData.coatColor);
-  nextChar.querySelector('.wizard-eyes').setAttribute('fill', objectData.eyesColor);
+var createDomElement = function (templateId, wizardObject) {
+  var templateWizardMarkup = document.querySelector(templateId).content;
+  var nextChar = templateWizardMarkup.cloneNode(true);
+  nextChar.querySelector('.setup-similar-label').textContent = wizardObject.name;
+  nextChar.querySelector('.wizard-coat').setAttribute('fill', wizardObject.coatColor);
+  nextChar.querySelector('.wizard-eyes').setAttribute('fill', wizardObject.eyesColor);
   return nextChar;
 };
 
 // Создает блок разметки из персонажей
-var createBlock = function (parentNode, template, arrayData) {
+var createBlock = function (parentNodeClass, templateId, arrayOfWizardObjects) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < arrayData.length; i++) {
-    var charList = document.querySelector(parentNode);
-    var charMarkup = createDomElement(template, arrayData[i]);
-    fragment.appendChild(charMarkup);
+  for (var i = 0; i < arrayOfWizardObjects.length; i++) {
+    var charList = document.querySelector(parentNodeClass);
+    var charDomElement = createDomElement(templateId, arrayOfWizardObjects[i]);
+    fragment.appendChild(charDomElement);
   }
   charList.appendChild(fragment);
 };
@@ -97,6 +96,6 @@ document.querySelector('.setup').classList.remove('hidden');
 document.querySelector('.setup-similar').classList.remove('hidden');
 
 // Начало
-var charactersArray = generateArrayOfSimilars(CHARACTER_COUNT);
-createBlock('.setup-similar-list', '#similar-wizard-template', charactersArray);
+var characters = generateArrayOfSimilarWizards(CHARACTER_COUNT);
+createBlock('.setup-similar-list', '#similar-wizard-template', characters);
 // Конец
