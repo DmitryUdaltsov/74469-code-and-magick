@@ -73,22 +73,22 @@ var generateArrayOfSimilarWizards = function (numberOfSimilarWizards) {
 // Создает разметку по шаблону с данными для одного похожего персонажа
 var createDomElement = function (templateId, wizardObject) {
   var templateWizardMarkup = document.querySelector(templateId).content;
-  var nextChar = templateWizardMarkup.cloneNode(true);
-  nextChar.querySelector('.setup-similar-label').textContent = wizardObject.name;
-  nextChar.querySelector('.wizard-coat').setAttribute('fill', wizardObject.coatColor);
-  nextChar.querySelector('.wizard-eyes').setAttribute('fill', wizardObject.eyesColor);
-  return nextChar;
+  var charNode = templateWizardMarkup.cloneNode(true);
+  charNode.querySelector('.setup-similar-label').textContent = wizardObject.name;
+  charNode.querySelector('.wizard-coat').setAttribute('fill', wizardObject.coatColor);
+  charNode.querySelector('.wizard-eyes').setAttribute('fill', wizardObject.eyesColor);
+  return charNode;
 };
 
 // Создает блок разметки из персонажей
-var createBlock = function (parentNodeClass, templateId, arrayOfWizardObjects) {
+var createBlock = function (parentNodeClassName, templateId, arrayOfWizardObjects) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < arrayOfWizardObjects.length; i++) {
-    var charList = document.querySelector(parentNodeClass);
-    var charDomElement = createDomElement(templateId, arrayOfWizardObjects[i]);
-    fragment.appendChild(charDomElement);
+    var parentNode = document.querySelector(parentNodeClassName);
+    var charNode = createDomElement(templateId, arrayOfWizardObjects[i]);
+    fragment.appendChild(charNode);
   }
-  charList.appendChild(fragment);
+  parentNode.appendChild(fragment);
 };
 
 // Убираем класс .hidden

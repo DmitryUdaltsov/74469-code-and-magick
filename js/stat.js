@@ -76,22 +76,18 @@ window.renderStatistics = function (ctx, names, times) {
   var createPlayers = function (playersTimes, playersNames) {
     var maxTime = 0;
     var players = [];
-    if (playersTimes.length !== playersNames.length) {
-      // console.log('Размеры массивов (времени прохождения и массив имён) не совпадают!');
-      // TODO: алерт без console.log
-    } else {
-      // Находит максимальное время прохождения игры
-      for (var i = 0; i < playersTimes.length; i++) {
-        if (playersTimes[i] > maxTime) {
-          maxTime = playersTimes[i];
-        }
+
+    // Находит максимальное время прохождения игры
+    for (var i = 0; i < playersTimes.length; i++) {
+      if (playersTimes[i] > maxTime) {
+        maxTime = playersTimes[i];
       }
-      for (i = 0; i < playersTimes.length; i++) {
-        var nextPlayer = new Player(playersNames[i], playersTimes[i]);
-        // Вычисляем высоту колонки гистограммы
-        nextPlayer.histColumnHeight = Math.round(playersTimes[i] / maxTime * histStyle.maxHeight);
-        players.push(nextPlayer);
-      }
+    }
+    for (i = 0; i < playersTimes.length; i++) {
+      var nextPlayer = new Player(playersNames[i], playersTimes[i]);
+      // Вычисляем высоту колонки гистограммы
+      nextPlayer.histColumnHeight = Math.round(playersTimes[i] / maxTime * histStyle.maxHeight);
+      players.push(nextPlayer);
     }
     return players;
   };
