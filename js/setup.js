@@ -114,24 +114,34 @@ var createBlock = function (parentNodeClassName, templateId, arrayOfWizardObject
   parentNode.appendChild(fragment);
 };
 
+// Закрыть попуп
+var closePopup = function () {
+  setupWindowElement.classList.add('hidden');
+};
+
+// Открыть попуп
+var openPopup = function () {
+  setupWindowElement.classList.remove('hidden');
+};
+
 // Обрабатывает нажатие клавиши Escape для закрытия окна настроек
 var handleEscapeKeyClose = function (evt) {
   if (evt.keyCode === KEYCODE_ESCAPE) {
-    setupWindowElement.classList.add('hidden');
+    closePopup();
   }
 };
 
 // Обрабатывает нажатие клавиши Enter для открытия окна настроек
 var handleEnterKeyOpen = function (evt) {
   if (evt.keyCode === KEYCODE_ENTER) {
-    setupWindowElement.classList.remove('hidden');
+    openPopup();
   }
 };
 
 // Обрабатывает нажатие клавиши Enter для закрытия окна настроек
 var handleEnterKeyClose = function (evt) {
   if (evt.keyCode === KEYCODE_ENTER) {
-    setupWindowElement.classList.add('hidden');
+    closePopup();
   }
 };
 
