@@ -51,17 +51,14 @@ var fireballColors = [
   '#e6e848'
 ];
 
-var setupOpenIconElement = document.querySelector('.setup-open-icon');
+var setupOpenElement = document.querySelector('.setup-open');
 var setupUserNameInputElement = document.querySelector('.setup-user-name');
-var setupSubmitButtonElement = document.querySelector('.setup-submit');
 var setupCloseElement = document.querySelector('.setup-close');
 var setupWindowElement = document.querySelector('.setup');
-var setupWizardCoatInputElement = document.querySelector('.setup-wizard-appearance')
-  .querySelector('input[name="coat-color"]');
-var setupWizardEyesInputElement = document.querySelector('.setup-wizard-appearance')
-  .querySelector('input[name="eyes-color"]');
-var setupCoatElement = document.querySelector('.setup-wizard').querySelector('.wizard-coat');
-var setupEyesElement = document.querySelector('.setup-wizard').querySelector('.wizard-eyes');
+var setupWizardCoatInputElement = document.querySelector('.setup-wizard-appearance input[name="coat-color"]');
+var setupWizardEyesInputElement = document.querySelector('.setup-wizard-appearance input[name="eyes-color"]');
+var setupCoatElement = document.querySelector('.setup-wizard .wizard-coat');
+var setupEyesElement = document.querySelector('.setup-wizard .wizard-eyes');
 var setupFireballElement = document.querySelector('.setup-fireball-wrap');
 
 // Получает случайное число в заданном диапазоне от beginNumber до endNumber
@@ -125,21 +122,21 @@ var openPopup = function () {
 };
 
 // Обрабатывает нажатие клавиши Escape для закрытия окна настроек
-var handleEscapeKeyClose = function (evt) {
+var escapeKeyCloseHandler = function (evt) {
   if (evt.keyCode === KEYCODE_ESCAPE) {
     closePopup();
   }
 };
 
 // Обрабатывает нажатие клавиши Enter для открытия окна настроек
-var handleEnterKeyOpen = function (evt) {
+var enterKeyOpenHandler = function (evt) {
   if (evt.keyCode === KEYCODE_ENTER) {
     openPopup();
   }
 };
 
 // Обрабатывает нажатие клавиши Enter для закрытия окна настроек
-var handleEnterKeyClose = function (evt) {
+var enterKeyCloseHandler = function (evt) {
   if (evt.keyCode === KEYCODE_ENTER) {
     closePopup();
   }
@@ -149,54 +146,33 @@ var handleEnterKeyClose = function (evt) {
 var addListeners = function () {
   // Открытие
   // Открывает окно настроек по клику на иконку игрока
-  setupOpenIconElement.addEventListener('click', function () {
-    setupWindowElement.classList.remove('hidden');
+  setupOpenElement.addEventListener('click', function () {
+    openPopup();
   });
 
   // Если иконка игрока в фокусе, то окно настройки открывается по клавише Enter
-  setupOpenIconElement.tabIndex = 0;
-  setupOpenIconElement.addEventListener('focus', function () {
-    setupOpenIconElement.addEventListener('keydown', handleEnterKeyOpen);
-  }, true);
+  setupOpenElement.addEventListener('keydown', enterKeyOpenHandler);
 
   // Закрытие
-  // Окно настройки закрывается по клавише Escape
-  document.addEventListener('keydown', handleEscapeKeyClose);
-
   // Если поле ввода имени игрока в фокусе, то окно настройки не закрывается по клавише Escape
   setupUserNameInputElement.addEventListener('focus', function () {
-    document.removeEventListener('keydown', handleEscapeKeyClose);
+    document.removeEventListener('keydown', escapeKeyCloseHandler);
   }, true);
 
   // Если поле ввода имени игрока не в фокусе, то окно настройки закрывается по клавише Escape
   setupUserNameInputElement.addEventListener('blur', function () {
-    document.addEventListener('keydown', handleEscapeKeyClose);
-  }, true);
-
-  // Если крестик закрытия окна в фокусе, то окно настройки закрывается по клавише Enter
-  setupCloseElement.tabIndex = 0;
-  setupCloseElement.addEventListener('focus', function () {
-    document.addEventListener('keydown', handleEnterKeyOpen);
+    document.addEventListener('keydown', escapeKeyCloseHandler);
   }, true);
 
   // Закрывает окно настроек по клику на крестик в окне настроек
   setupCloseElement.addEventListener('click', function () {
-    setupWindowElement.classList.add('hidden');
+    closePopup();
   });
 
   // Закрывает окно настроек по нажтию клавиши Enter если крестик в фокусе в окне настроек
-  setupCloseElement.addEventListener('focus', function () {
-    document.addEventListener('keydown', handleEnterKeyClose);
-  });
+  setupCloseElement.addEventListener('keydown', enterKeyCloseHandler);
 
-  // Закрывает окно настроек по клику на крестик в окне настроек
-  setupCloseElement.addEventListener('blur', function () {
-    document.removeEventListener('keydown', handleEnterKeyClose);
-  });
-};
-
-// Меняет по клику мыши цвет плаща, глаз и фаербола волшебника пользователя
-var changeUserWizardOnClick = function () {
+  // Меняет по клику мыши цвет плаща, глаз и фаербола волшебника пользователя
   // Плащ
   setupCoatElement.addEventListener('click', function () {
     var newColor = getRandomElement(coatColors);
@@ -217,15 +193,9 @@ var changeUserWizardOnClick = function () {
   });
 };
 
-// Валидация поля ввода имени персонажа
+// Кастомный текст сообщения об ошибке для отработки события invalid в поле ввода имени персонажа
 var validateForm = function () {
-  // Валидация поля ввода: минимум 2 символа, максимум 25 символов
-  // Задаем минимальную длинну поля ввода имени персонажа
-  setupUserNameInputElement.setAttribute('minlength', '2');
-  // Для кнопки отправки формы добавляем аттрибут submit
-  setupSubmitButtonElement.setAttribute('type', 'submit');
 
-  // Кастомный текст сообщения об ошибке для отработки события invalid в поле ввода имени персонажа
   setupUserNameInputElement.addEventListener('invalid', function () {
     if (setupUserNameInputElement.validity.tooShort) {
       setupUserNameInputElement.setCustomValidity('Имя должно состоять минимум из двух символов');
@@ -254,7 +224,6 @@ document.querySelector('.setup-similar').classList.remove('hidden');
 // Начало
 addListeners();
 validateForm();
-changeUserWizardOnClick();
 var characters = generateArrayOfSimilarWizards(CHARACTER_COUNT);
 createBlock('.setup-similar-list', '#similar-wizard-template', characters);
 // Конец
