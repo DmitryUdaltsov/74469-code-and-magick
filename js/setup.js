@@ -111,7 +111,7 @@ var createBlock = function (parentNodeClassName, templateId, arrayOfWizardObject
   parentNode.appendChild(fragment);
 };
 
-var onEscPressHandler = function (evt) {
+var popupEscPressHandler = function (evt) {
   if ((setupUserNameInputElement !== document.activeElement) && (evt.keyCode === KEYCODE_ESCAPE)) {
     closePopup();
   }
@@ -120,7 +120,7 @@ var onEscPressHandler = function (evt) {
 // Закрыть окно настроек
 var closePopup = function () {
   setupWindowElement.classList.add('hidden');
-  document.removeEventListener('keydown', onEscPressHandler);
+  document.removeEventListener('keydown', popupEscPressHandler);
 };
 
 // Открыть окно настроек
@@ -129,7 +129,7 @@ var openPopup = function () {
   // Закрытие
   // Всегда закрываем по Escape
   // Если поле ввода имени игрока в фокусе, то окно настройки не закрывается по клавише Escape
-  document.addEventListener('keydown', onEscPressHandler);
+  document.addEventListener('keydown', popupEscPressHandler);
 };
 
 // Навешивает листенеры на окно настроек по клику и клавиатуре
@@ -146,8 +146,6 @@ var addListeners = function () {
       openPopup();
     }
   });
-
-
 
   // Закрывает окно настроек по клику на крестик в окне настроек
   setupCloseElement.addEventListener('click', function () {
