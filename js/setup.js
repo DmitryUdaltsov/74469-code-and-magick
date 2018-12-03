@@ -111,35 +111,14 @@ var createBlock = function (parentNodeClassName, templateId, arrayOfWizardObject
   parentNode.appendChild(fragment);
 };
 
-// Закрыть попуп
+// Закрыть окно настроек
 var closePopup = function () {
   setupWindowElement.classList.add('hidden');
 };
 
-// Открыть попуп
+// Открыть окно настроек
 var openPopup = function () {
   setupWindowElement.classList.remove('hidden');
-};
-
-// Обрабатывает нажатие клавиши Escape для закрытия окна настроек
-var escapeKeyCloseHandler = function (evt) {
-  if (evt.keyCode === KEYCODE_ESCAPE) {
-    closePopup();
-  }
-};
-
-// Обрабатывает нажатие клавиши Enter для открытия окна настроек
-var enterKeyOpenHandler = function (evt) {
-  if (evt.keyCode === KEYCODE_ENTER) {
-    openPopup();
-  }
-};
-
-// Обрабатывает нажатие клавиши Enter для закрытия окна настроек
-var enterKeyCloseHandler = function (evt) {
-  if (evt.keyCode === KEYCODE_ENTER) {
-    closePopup();
-  }
 };
 
 // Навешивает листенеры на окно настроек по клику и клавиатуре
@@ -151,18 +130,20 @@ var addListeners = function () {
   });
 
   // Если иконка игрока в фокусе, то окно настройки открывается по клавише Enter
-  setupOpenElement.addEventListener('keydown', enterKeyOpenHandler);
+  setupOpenElement.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEYCODE_ENTER) {
+      openPopup();
+    }
+  });
 
   // Закрытие
+  // Всегда закрываем по Escape
   // Если поле ввода имени игрока в фокусе, то окно настройки не закрывается по клавише Escape
-  setupUserNameInputElement.addEventListener('focus', function () {
-    document.removeEventListener('keydown', escapeKeyCloseHandler);
-  }, true);
-
-  // Если поле ввода имени игрока не в фокусе, то окно настройки закрывается по клавише Escape
-  setupUserNameInputElement.addEventListener('blur', function () {
-    document.addEventListener('keydown', escapeKeyCloseHandler);
-  }, true);
+  document.addEventListener('keydown', function (evt) {
+    if ((setupUserNameInputElement !== document.activeElement) && (evt.keyCode === KEYCODE_ESCAPE)) {
+      closePopup();
+    }
+  });
 
   // Закрывает окно настроек по клику на крестик в окне настроек
   setupCloseElement.addEventListener('click', function () {
@@ -170,7 +151,11 @@ var addListeners = function () {
   });
 
   // Закрывает окно настроек по нажтию клавиши Enter если крестик в фокусе в окне настроек
-  setupCloseElement.addEventListener('keydown', enterKeyCloseHandler);
+  setupCloseElement.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEYCODE_ENTER) {
+      closePopup();
+    }
+  });
 
   // Меняет по клику мыши цвет плаща, глаз и фаербола волшебника пользователя
   // Плащ
