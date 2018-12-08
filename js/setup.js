@@ -123,8 +123,14 @@ var closePopup = function () {
   document.removeEventListener('keydown', popupEscPressHandler);
 };
 
+
+var setupFormElementStyleTop = setupWindowElement.style.top;
+var setupFormElementStyleLeft = setupWindowElement.style.left;
+
 // Открыть окно настроек
 var openPopup = function () {
+  setupWindowElement.style.top = setupFormElementStyleTop;
+  setupWindowElement.style.left = setupFormElementStyleLeft;
   setupWindowElement.classList.remove('hidden');
   // Закрытие
   // Всегда закрываем по Escape
