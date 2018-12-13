@@ -53,4 +53,8 @@
       closePopup();
     }
   });
+
+  window.setupVisibilityControl = {
+    closePopup: closePopup
+  };
 })();
