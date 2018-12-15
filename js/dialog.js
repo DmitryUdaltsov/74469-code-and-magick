@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ *  Перетаскивание попапа настройки
+ */
 (function () {
 
   var setupWindowElement = document.querySelector('.setup');

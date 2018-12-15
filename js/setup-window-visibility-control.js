@@ -1,6 +1,8 @@
 'use strict';
 
-// Навешивает листенеры на окно настроек по клику и клавиатуре
+/**
+ * Навешивает листенеры на окно настроек по клику и клавиатуре
+ */
 (function () {
   var setupWindowElement = document.querySelector('.setup');
   var setupOpenElement = document.querySelector('.setup-open');

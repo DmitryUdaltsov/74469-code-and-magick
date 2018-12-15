@@ -35,17 +35,6 @@
     return charNode;
   };
 
-  // Создает блок разметки из персонажей по шаблону
-  var createBlock = function (parentNodeClassName, templateId, arrayOfWizardObjects) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arrayOfWizardObjects.length; i++) {
-      var parentNode = document.querySelector(parentNodeClassName);
-      var charNode = createDomElement(templateId, arrayOfWizardObjects[i]);
-      fragment.appendChild(charNode);
-    }
-    parentNode.appendChild(fragment);
-  };
-
   // Выбор из массива похожих волшебников четырех случайных волшебников.
   window.chooseRandomFour = function (wizards) {
     var choosenWizards = [];
@@ -56,6 +45,20 @@
       }
     }
     return choosenWizards;
+  };
+
+  // Создает блок разметки из персонажей по шаблону
+  var createBlock = function (arrayOfWizardObjects) {
+    var parentNodeClassName = '.setup-similar-list';
+    var templateId = '#similar-wizard-template';
+    arrayOfWizardObjects = window.chooseRandomFour(arrayOfWizardObjects);
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < arrayOfWizardObjects.length; i++) {
+      var parentNode = document.querySelector(parentNodeClassName);
+      var charNode = createDomElement(templateId, arrayOfWizardObjects[i]);
+      fragment.appendChild(charNode);
+    }
+    parentNode.appendChild(fragment);
   };
 
   // Плашка сверху сайта об ошибке загрузки похожих волшебников
@@ -71,6 +74,7 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
+  // Отправка формы
   var submitHandler = function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(setupWizardFormElement),
