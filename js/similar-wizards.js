@@ -9,12 +9,12 @@
   var eyesColor = document.querySelector('.wizard-eyes').style.fill;
   var wizards = [];
 
-  window.myWizard.onEyesChange = window.debounce(function (color) {
+  window.myWizard.setEyesColor = window.debounce(function (color) {
     eyesColor = color;
     updateWizards();
   });
 
-  window.myWizard.onCoatChange = window.debounce(function (color) {
+  window.myWizard.setCoatColor = window.debounce(function (color) {
     coatColor = color;
     updateWizards();
   });

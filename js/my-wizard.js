@@ -42,7 +42,7 @@
     var newColor = window.getRandomElement(coatColors).toString();
     setupUserCoatElement.style.fill = newColor;
     setupWizardCoatInputElement.setAttribute('value', newColor);
-    window.myWizard.onCoatChange(newColor);
+    window.myWizard.setCoatColor(newColor);
   });
 
   // Глаза
@@ -50,7 +50,7 @@
     var newColor = window.getRandomElement(eyesColors).toString();
     setupUserEyesElement.setAttribute('fill', newColor);
     setupWizardEyesInputElement.setAttribute('value', newColor);
-    window.myWizard.onEyesChange(newColor);
+    window.myWizard.setEyesColor(newColor);
   });
 
   // Фаербол

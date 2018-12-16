@@ -12,9 +12,9 @@
     return function () {
       var parameters = arguments;
       if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
+        clearTimeout(lastTimeout);
       }
-      lastTimeout = window.setTimeout(function () {
+      lastTimeout = setTimeout(function () {
         callBack.apply(null, parameters);
       }, DEBOUNCE_INTERVAL);
     };
