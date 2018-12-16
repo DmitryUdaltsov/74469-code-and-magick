@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * Загружает данные с сервера и отправляет данные на сервер.
+ */
 (function () {
   var DATA_URL = 'https://js.dump.academy/code-and-magick/data';
   var POST_URL = 'https://js.dump.academy/code-and-magick';

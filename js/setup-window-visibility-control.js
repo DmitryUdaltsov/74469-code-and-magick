@@ -4,6 +4,8 @@
  * Навешивает листенеры на окно настроек по клику и клавиатуре
  */
 (function () {
+  var KEYCODE_ESCAPE = 27;
+  var KEYCODE_ENTER = 13;
   var setupWindowElement = document.querySelector('.setup');
   var setupOpenElement = document.querySelector('.setup-open');
   var setupCloseElement = document.querySelector('.setup-close');
@@ -16,7 +18,7 @@
   });
 
   var popupEscPressHandler = function (evt) {
-    if ((window.setupUserNameInputElement !== document.activeElement) && (evt.keyCode === window.KEYCODE_ESCAPE)) {
+    if ((window.setupUserNameInputElement !== document.activeElement) && (evt.keyCode === KEYCODE_ESCAPE)) {
       closePopup();
     }
   };
@@ -39,7 +41,7 @@
   };
   // Если иконка игрока в фокусе, то окно настройки открывается по клавише Enter
   setupOpenElement.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.KEYCODE_ENTER) {
+    if (evt.keyCode === KEYCODE_ENTER) {
       openPopup();
     }
   });
@@ -51,7 +53,7 @@
 
   // Закрывает окно настроек по нажтию клавиши Enter если крестик в фокусе в окне настроек
   setupCloseElement.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.KEYCODE_ENTER) {
+    if (evt.keyCode === KEYCODE_ENTER) {
       closePopup();
     }
   });

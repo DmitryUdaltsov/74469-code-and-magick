@@ -1,7 +1,10 @@
 'use strict';
 
-// Кастомный текст сообщения об ошибке для отработки события invalid в поле ввода имени персонажа
+/**
+ * Кастомный текст сообщения об ошибке для отработки события invalid в поле ввода имени персонажа
+ */
 (function () {
+  window.setupUserNameInputElement = document.querySelector('.setup-user-name');
   window.validateForm = function () {
 
     window.setupUserNameInputElement.addEventListener('invalid', function () {
